@@ -1,15 +1,26 @@
-import sys
+# N -> 세로, M -> 가로
+N, M = map(int, input().split(" "))
 
-M, N = map(int, input().split(' '))
+board = [list(map(str, input())) for _ in range(N)]
 
-board = [[0] * N for _ in range(M)]
 
-for i in range(M):
-    s = input()
-    for j in range(N):
-        board[i][j] = s[j]
+for col in range(0, N - 7):
+    for row in range(0, M - 7):
+        countW = 0
+        countB = 0
+        for i in range(col,col+8):
+            for j in range(row,row+8):
+                if board[0][0] == 'B':
+                    if board[i][j] != 'W':
+                        countW += 1
+                    if board[i][j] != 'B':
+                        countB += 1
+                else:
+                    if board[i][j] != 'W':
+                        countB += 1
+                    if board[i][j] != 'B':
+                        countW += 1
 
-count = (M - 7) * (N - 7)
 
 
 
