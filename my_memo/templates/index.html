@@ -1,0 +1,153 @@
+<!Doctype html>
+<html lang="ko">
+
+    <head>
+        <!-- Required meta tags -->
+        <meta charset="utf-8">
+        <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
+
+        <!-- Bootstrap CSS -->
+        <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap@4.6.0/dist/css/bootstrap.min.css"
+            integrity="sha384-B0vP5xmATw1+K9KRQjQERJvTumQW0nPEzvF6L/Z6nronJ3oUOFUFpCjEUQouq2+l"
+            crossorigin="anonymous">
+
+			  <!-- JS -->
+        <script src="https://code.jquery.com/jquery-3.4.1.js"></script>
+
+        <script src="https://cdn.jsdelivr.net/npm/popper.js@1.16.1/dist/umd/popper.min.js"
+            integrity="sha384-9/reFTGAW83EW2RDu2S0VKaIzap3H66lZH81PoYlFhbGU+6BZp6G7niu735Sk7lN"
+            crossorigin="anonymous"></script>
+
+        <!-- 구글폰트 -->
+        <link href="https://fonts.googleapis.com/css?family=Stylish&display=swap" rel="stylesheet">
+
+
+        <title>홍창섭 - 과제</title>
+
+        <!-- style -->
+        <style type="text/css">
+            * {
+                font-family: "Stylish", sans-serif;
+            }
+
+            .wrap {
+                width: 900px;
+                margin: auto;
+            }
+
+            .comment {
+                color: blue;
+                font-weight: bold;
+            }
+
+            #post-box {
+                width: 500px;
+                margin: 20px auto;
+                padding: 50px;
+                border: black solid;
+                border-radius: 5px;
+            }
+        </style>
+        <script>
+            $(document).ready(function () {
+                $("#cards-box").html("");
+                showArticles();
+            });
+
+
+            function showArticles() {
+                $.ajax({
+                    type: "GET",
+                    url: "/memo",
+                    data: {},
+                    success: function (response) {
+                        let data = response["data"];
+                        console.log(data);
+                        for (let i = 0; i < data.length; i++) {
+                            makeCard(data[i].title, data[i].content,data[i].uuid,i+1);
+                        }
+                    }
+                })
+            }
+
+            let deleteMemo = (event) => {
+                console.log(event.currentTarget.id);
+                id = event.currentTarget.id
+                $.ajax({
+                    type: "DELETE",
+                    url: "/memo/"+id
+                }).then(
+                    location.reload()
+                )
+            }
+
+            let changeUpdateForm = (event,index) => {
+                id = event.currentTarget.id
+                console.log(index)
+                $('h5').contents().unwrap().wrap(`<form action="update/memo" method="post">
+                    <div>
+                        <input id="input-title" class="form-control" name="title"
+                                type="text" placeholder="메모 제목을 입력하세요"
+                               style="margin-bottom: 10px">
+                    </div>
+                    <div>
+                        <textarea id="input-text" class="form-control" name="content"
+                                placeholder="내용을 입력하세요"></textarea>
+                    </div>
+                    <div>
+                        <input name="id" value="${id}" hidden>
+                    </div>
+                    <button type="submit" class="btn btn-primary">저장</button>
+                     </form>
+                    </div>
+                   `)
+                $('p').remove()
+                $('.default').remove()
+            }
+
+            let updateMemo = (id) => {
+
+            }
+
+            function makeCard(title, content,id,index) {
+                let tempHtml = `<div class="card">
+                        <div>
+                        <h5 class="card-text ${index}">${title}</h5>
+                        <p class="card-text">${content}</p>
+                        </div>
+                        <div class="default">
+                            <button id=${id} onclick="changeUpdateForm(event,${index})">수정</button>
+                            <button id=${id} onclick="deleteMemo(event)">삭제</button>
+                        </div>
+                    </div>`;
+                $("#cards-box").append(tempHtml);
+            }
+
+
+        </script>
+
+    </head>
+
+    <body>
+        <div class="wrap">
+            <div class="jumbotron">
+                <h1 class="display-4">나홀로 메모장</h1>
+                <form action="memo" method="post">
+                    <div>
+                        <input id="input-title" class="form-control" name="title"
+                                type="text" placeholder="메모 제목을 입력하세요"
+                               style="margin-bottom: 10px">
+                    </div>
+                    <div>
+                        <textarea id="input-text" class="form-control" name="content"
+                                placeholder="내용을 입력하세요"></textarea>
+                    </div>
+                    <button type="submit" class="btn btn-primary">저장</button>
+                </form>
+            </div>
+        </div>
+        <div id="cards-box" class="card-columns">
+        </div>
+    </body>
+
+</html>
