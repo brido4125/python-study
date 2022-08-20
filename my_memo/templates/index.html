@@ -50,7 +50,7 @@
         </style>
         <script>
             $(document).ready(function () {
-                $("#cards-box").html("");
+                $("#cards-list").html("");
                 showArticles();
             });
 
@@ -86,12 +86,12 @@
                 console.log(index)
                 $('h5').contents().unwrap().wrap(`<form action="update/memo" method="post">
                     <div>
-                        <input id="input-title" class="form-control" name="title"
+                        <input id="mod-title" class="form-control" name="title"
                                 type="text" placeholder="메모 제목을 입력하세요"
                                style="margin-bottom: 10px">
                     </div>
                     <div>
-                        <textarea id="input-text" class="form-control" name="content"
+                        <textarea id="mod-text" class="form-control" name="content"
                                 placeholder="내용을 입력하세요"></textarea>
                     </div>
                     <div>
@@ -111,16 +111,16 @@
 
             function makeCard(title, content,id,index) {
                 let tempHtml = `<div class="card">
-                        <div>
-                        <h5 class="card-text ${index}">${title}</h5>
+                        <div id=${index}>
+                        <h5 class="card-title">${title}</h5>
                         <p class="card-text">${content}</p>
                         </div>
                         <div class="default">
-                            <button id=${id} onclick="changeUpdateForm(event,${index})">수정</button>
-                            <button id=${id} onclick="deleteMemo(event)">삭제</button>
+                            <button id=${id} class="btn-primary" onclick="changeUpdateForm(event,${index})">수정</button>
+                            <button id=${id} class="btn-danger" onclick="deleteMemo(event)">삭제</button>
                         </div>
                     </div>`;
-                $("#cards-box").append(tempHtml);
+                $("#cards-list").append(tempHtml);
             }
 
 
@@ -142,11 +142,11 @@
                         <textarea id="input-text" class="form-control" name="content"
                                 placeholder="내용을 입력하세요"></textarea>
                     </div>
-                    <button type="submit" class="btn btn-primary">저장</button>
+                    <button type="submit" class="btn btn-primary">저장하기</button>
                 </form>
             </div>
         </div>
-        <div id="cards-box" class="card-columns">
+        <div id="cards-list" class="card-columns">
         </div>
     </body>
 

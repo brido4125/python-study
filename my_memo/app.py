@@ -47,9 +47,12 @@ def update_memo():
     title = request.form.get('title')
     content = request.form.get('content')
     id = request.form.get('id')
-    find_query= {'uuid': id}
-    new_values= {'$set':{'title':title,'content':content}}
-    db.memo.update_one(find_query,new_values)
+    #아무것도 입력하지 않았을 경우 예외 처리
+    if title == '' and content == '':
+        return redirect(url_for('home'))
+    find_query = {'uuid': id}
+    new_values = {'$set': {'title': title, 'content': content}}
+    db.memo.update_one(find_query, new_values)
     return redirect(url_for('home'))
 
 
