@@ -82,9 +82,10 @@
             }
 
             let changeUpdateForm = (event,index) => {
-                id = event.currentTarget.id
+                id = event.currentTarget.id.toString()
                 console.log(index)
-                $('h5').contents().unwrap().wrap(`<form action="update/memo" method="post">
+                $("#"+index).empty()
+                $("#"+index).append(`<form action="update/memo" method="post">
                     <div>
                         <input id="mod-title" class="form-control" name="title"
                                 type="text" placeholder="메모 제목을 입력하세요"
@@ -99,10 +100,7 @@
                     </div>
                     <button type="submit" class="btn btn-primary">저장</button>
                      </form>
-                    </div>
                    `)
-                $('p').remove()
-                $('.default').remove()
             }
 
             let updateMemo = (id) => {
@@ -114,11 +112,12 @@
                         <div id=${index}>
                         <h5 class="card-title">${title}</h5>
                         <p class="card-text">${content}</p>
-                        </div>
                         <div class="default">
                             <button id=${id} class="btn-primary" onclick="changeUpdateForm(event,${index})">수정</button>
                             <button id=${id} class="btn-danger" onclick="deleteMemo(event)">삭제</button>
                         </div>
+                        </div>
+
                     </div>`;
                 $("#cards-list").append(tempHtml);
             }
